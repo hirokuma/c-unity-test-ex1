@@ -3,6 +3,7 @@
 #include "target1/target.h"
 #include "target2/target.h"
 
+#ifndef TEST_BUILD
 int main(void)
 {
     int a = target1_func(10);
@@ -10,3 +11,4 @@ int main(void)
     printf("a=%d, b=%d\n", a, b);
     return 0;
 }
+#endif // TEST_BUILD

@@ -8,12 +8,10 @@ OUTPUT_BINARY_DIRECTORY = out
 
 # source files
 C_DIRECTORY = ./src
-# contains main()
-C_MAIN_FILE = main.c
-# without main()
 C_FILES = \
 	target1/target.c \
-	target2/target.c
+	target2/target.c \
+	main.c
 
 # includes
 C_INCLUDE_PATHS =
@@ -118,8 +116,7 @@ help:
 	@echo "    tests:   run tests"
 
 
-C_SOURCES = $(addprefix $(C_DIRECTORY)/, $(C_FILES))
-C_SOURCE_FILES = $(C_SOURCES) $(C_DIRECTORY)/$(C_MAIN_FILE))
+C_SOURCE_FILES = $(addprefix $(C_DIRECTORY)/, $(C_FILES))
 C_SOURCE_FILE_NAMES = $(notdir $(C_SOURCE_FILES))
 C_PATHS = $(call rmdup, $(dir $(C_SOURCE_FILES)))
 INC_DIRECTORIES := $(addprefix -I, $(C_INCLUDE_PATHS))
@@ -177,11 +174,12 @@ TEST_OBJECT_DIRECTORY = $(TESTS_DIRECTORY)/$(OUTPUT_BINARY_DIRECTORY)
 TEST_BINARY = unity_test
 tests: CFLAGS += -DDEBUG -I$(UNITY_MAIN_DIRECTORY) -I$(UNITY_FIXTURE_DIRECTORY) -I$(UNITY_MEMORY_DIRECTORY) -I$(C_DIRECTORY) $(INC_DIRECTORIES)
 tests: CFLAGS += -ggdb3 -O0
+tests: CFLAGS += -DTEST_BUILD
 tests: LDFLAGS += -ggdb3 -O0
 tests: $(TESTS_OBJECTS)
 	@$(MK) -p $(TEST_OBJECT_DIRECTORY)
 	@echo [TESTS]CFLAGS=$(CFLAGS)
-	$(NO_ECHO)$(CC) $(CFLAGS) $(LDFLAGS) $(LIBS) -o $(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY) $(UNITY_FIXTURE_DIRECTORY)/unity_fixture.c $(UNITY_MAIN_DIRECTORY)/unity.c $(TESTS_SOURCE_FILES) $(C_SOURCES)
+	$(NO_ECHO)$(CC) $(CFLAGS) $(LDFLAGS) $(LIBS) -o $(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY) $(UNITY_FIXTURE_DIRECTORY)/unity_fixture.c $(UNITY_MAIN_DIRECTORY)/unity.c $(TESTS_SOURCE_FILES) $(C_SOURCE_FILES)
 	@echo Run Tests
 	$(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY)
 
