@@ -27,7 +27,7 @@ TESTS_FILES += \
 	test_target1.c \
 	test_target2.c \
 	test_main.c
-UNITY_DIRECTORY = ../Unity
+UNITY_DIRECTORY = ../cmock/vendor/unity
 
 
 # Link Library

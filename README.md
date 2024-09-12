@@ -3,8 +3,11 @@
 C言語のテストフレームワーク[Unity](https://www.throwtheswitch.org/unity)のサンプル。
 
 ```console
+$ git clone --recursive https://github.com/throwtheswitch/cmock.git
+$ cd cmock
+$ bundle install
+$ cd ..
 $ git clone https://github.com/hirokuma/c-unity-test-ex1.git
-$ git clone https://github.com/ThrowTheSwitch/Unity.git
 $ cd c-unity-test-ex1
 $ make
 $ make run
@@ -13,7 +16,7 @@ $ make clean
 
 ```console
 $ make tests
-[TESTS]CFLAGS=--std=gnu99 -Wall -Werror -DDEBUG -I../Unity/src -I../Unity/extras/fixture/src -I../Unity/extras/memory/src -I./src -ggdb3 -O0
+[TESTS]CFLAGS=--std=gnu99 -Wall -Werror -DDEBUG -I../cmock/vendor/unity/src -I../cmock/vendor/unity/extras/fixture/src -I../cmock/vendor/unity/extras/memory/src -I./src -ggdb3 -O0
 Run Tests
 ./tests/out/unity_test
 Unity test run 1 of 1
