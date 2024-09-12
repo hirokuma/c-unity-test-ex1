@@ -1,0 +1,3 @@
+:cmock:
+  :subdir: "target1"
+  :mock_prefix: "Target1"

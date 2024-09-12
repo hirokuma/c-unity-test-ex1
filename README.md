@@ -14,11 +14,23 @@ $ make run
 $ make clean
 ```
 
+### mock作成
+
+```console
+$ make mock
+ruby ../cmock/lib/cmock.rb -otests/cmock-target1.yaml ./src/target1/target.h
+Creating mock for target...
+ruby ../cmock/lib/cmock.rb -otests/cmock-target2.yaml ./src/target2/target.h
+Creating mock for target...
+```
+
+### test
+
 ```console
 $ make tests
-[TESTS]CFLAGS=--std=gnu99 -Wall -Werror -DDEBUG -I../cmock/vendor/unity/src -I../cmock/vendor/unity/extras/fixture/src -I../cmock/vendor/unity/extras/memory/src -I./src -ggdb3 -O0
-Run Tests
-./tests/out/unity_test
+[TESTS]CFLAGS=--std=gnu99 -Wall -Werror -DDEBUG -I../cmock/vendor/unity/src -I../cmock/vendor/unity/extras/fixture/src -I../cmock/vendor/unity/extras/memory/src -I./src -I../cmock/src -I./mocks -ggdb3 -O0 -DTEST_BUILD
+Run Tests1
+./tests/out/unity_test1
 Unity test run 1 of 1
 .
 setUp: target1
@@ -45,7 +57,20 @@ tearDown: target2
 
 
 -----------------------
-4 Tests 2 Failures 0 Ignored
+4 Tests 2 Failures 0 Ignored 
 FAIL
-make: *** [Makefile:186: tests] Error 2
+make: [Makefile:193: tests] Error 2 (ignored)
+Run Tests2
+./tests/out/unity_test2
+Unity test run 1 of 1
+.
+setUp: main
+テスト1: main
+
+tearDown: main
+
+
+-----------------------
+1 Tests 0 Failures 0 Ignored 
+OK
 ```

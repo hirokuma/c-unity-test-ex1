@@ -24,9 +24,13 @@ TESTS_DIRECTORY = ./tests
 TESTS_FILES += \
 	test_target1.c \
 	test_target2.c \
-	test_main.c
+	test_unity.c
 UNITY_DIRECTORY = ../cmock/vendor/unity
 
+CMOCK_DIRECTORY = ../cmock
+CMOCK_FILES = \
+	./mocks/target1/Target1target.c \
+	./mocks/target2/Target2target.c
 
 # Link Library
 LIBS =
@@ -37,6 +41,10 @@ LDFLAGS =
 
 
 #GNU_PREFIX := arm-none-eabi-
+
+mock:
+	ruby ../cmock/lib/cmock.rb -otests/cmock-target1.yaml $(C_DIRECTORY)/target1/target.h
+	ruby ../cmock/lib/cmock.rb -otests/cmock-target2.yaml $(C_DIRECTORY)/target2/target.h
 
 ###########################################
 
@@ -171,17 +179,21 @@ UNITY_FIXTURE_DIRECTORY = $(UNITY_DIRECTORY)/extras/fixture/src
 UNITY_MEMORY_DIRECTORY = $(UNITY_DIRECTORY)/extras/memory/src
 TESTS_SOURCE_FILES = $(addprefix $(TESTS_DIRECTORY)/, $(TESTS_FILES))
 TEST_OBJECT_DIRECTORY = $(TESTS_DIRECTORY)/$(OUTPUT_BINARY_DIRECTORY)
-TEST_BINARY = unity_test
-tests: CFLAGS += -DDEBUG -I$(UNITY_MAIN_DIRECTORY) -I$(UNITY_FIXTURE_DIRECTORY) -I$(UNITY_MEMORY_DIRECTORY) -I$(C_DIRECTORY) $(INC_DIRECTORIES)
+TEST_BINARY1 = unity_test1
+TEST_BINARY2 = unity_test2
+tests: CFLAGS += -DDEBUG -I$(UNITY_MAIN_DIRECTORY) -I$(UNITY_FIXTURE_DIRECTORY) -I$(UNITY_MEMORY_DIRECTORY) -I$(C_DIRECTORY) $(INC_DIRECTORIES) -I$(CMOCK_DIRECTORY)/src -I./mocks
 tests: CFLAGS += -ggdb3 -O0
 tests: CFLAGS += -DTEST_BUILD
 tests: LDFLAGS += -ggdb3 -O0
 tests: $(TESTS_OBJECTS)
 	@$(MK) -p $(TEST_OBJECT_DIRECTORY)
 	@echo [TESTS]CFLAGS=$(CFLAGS)
-	$(NO_ECHO)$(CC) $(CFLAGS) $(LDFLAGS) $(LIBS) -o $(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY) $(UNITY_FIXTURE_DIRECTORY)/unity_fixture.c $(UNITY_MAIN_DIRECTORY)/unity.c $(TESTS_SOURCE_FILES) $(C_SOURCE_FILES)
-	@echo Run Tests
-	$(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY)
+	$(NO_ECHO)$(CC) $(CFLAGS) $(LDFLAGS) $(LIBS) -o $(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY1) $(UNITY_FIXTURE_DIRECTORY)/unity_fixture.c $(UNITY_MAIN_DIRECTORY)/unity.c $(TESTS_SOURCE_FILES)  $(CMOCK_DIRECTORY)/src/cmock.c $(C_SOURCE_FILES)
+	@echo Run Tests1
+	-$(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY1)
+	$(NO_ECHO)$(CC) $(CFLAGS) $(LDFLAGS) $(LIBS) -o $(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY2) $(UNITY_FIXTURE_DIRECTORY)/unity_fixture.c $(UNITY_MAIN_DIRECTORY)/unity.c $(TESTS_DIRECTORY)/test_main.c $(CMOCK_DIRECTORY)/src/cmock.c $(CMOCK_FILES) $(C_DIRECTORY)/main.c
+	@echo Run Tests2
+	-$(TEST_OBJECT_DIRECTORY)/$(TEST_BINARY2)
 
 clean:
-	$(RM) $(OBJECT_DIRECTORY) $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME) $(TEST_OBJECT_DIRECTORY)
+	$(RM) $(OBJECT_DIRECTORY) $(OUTPUT_BINARY_DIRECTORY)/$(OUTPUT_FILENAME) $(TEST_OBJECT_DIRECTORY) mocks
