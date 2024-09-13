@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "target1/target.h"
-#include "target2/target.h"
+#include "target1/target1.h"
+#include "target2/target2.h"
 
 int dummy_calc(int a, int b)
 {

@@ -2,8 +2,8 @@
 
 #include "unity_fixture.h"
 
-#include "../mocks/target1/Target1target.h"
-#include "../mocks/target2/Target2target.h"
+#include "../mocks/Mocktarget1.h"
+#include "../mocks/Mocktarget2.h"
 
 // main.c
 int dummy_calc(int a, int b);

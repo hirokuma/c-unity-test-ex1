@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "target.h"
+#include "target1.h"
 
 int target1_func(int arg)
 {

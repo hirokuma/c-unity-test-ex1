@@ -2,7 +2,7 @@
 
 #include "unity_fixture.h"
 
-#include "target1/target.h"
+#include "target1/target1.h"
 
 TEST_GROUP(target1);
 

@@ -9,12 +9,14 @@ OUTPUT_BINARY_DIRECTORY = out
 # source files
 C_DIRECTORY = ./src
 C_FILES = \
-	target1/target.c \
-	target2/target.c \
+	target1/target1.c \
+	target2/target2.c \
 	main.c
 
 # includes
-C_INCLUDE_PATHS =
+C_INCLUDE_PATHS =\
+	target1 \
+	target2
 
 # object files
 OBJECT_DIRECTORY = _build
@@ -29,8 +31,8 @@ UNITY_DIRECTORY = ../cmock/vendor/unity
 
 CMOCK_DIRECTORY = ../cmock
 CMOCK_FILES = \
-	./mocks/target1/Target1target.c \
-	./mocks/target2/Target2target.c
+	./mocks/Mocktarget1.c \
+	./mocks/Mocktarget2.c
 
 # Link Library
 LIBS =
@@ -43,8 +45,8 @@ LDFLAGS =
 #GNU_PREFIX := arm-none-eabi-
 
 mock:
-	ruby ../cmock/lib/cmock.rb -otests/cmock-target1.yaml $(C_DIRECTORY)/target1/target.h
-	ruby ../cmock/lib/cmock.rb -otests/cmock-target2.yaml $(C_DIRECTORY)/target2/target.h
+	ruby ../cmock/lib/cmock.rb $(C_DIRECTORY)/target1/target1.h
+	ruby ../cmock/lib/cmock.rb $(C_DIRECTORY)/target2/target2.h
 
 ###########################################
 
@@ -127,7 +129,7 @@ help:
 C_SOURCE_FILES = $(addprefix $(C_DIRECTORY)/, $(C_FILES))
 C_SOURCE_FILE_NAMES = $(notdir $(C_SOURCE_FILES))
 C_PATHS = $(call rmdup, $(dir $(C_SOURCE_FILES)))
-INC_DIRECTORIES := $(addprefix -I, $(C_INCLUDE_PATHS))
+INC_DIRECTORIES := $(addprefix -I$(C_DIRECTORY)/, $(C_INCLUDE_PATHS))
 
 C_OBJECTS = $(addprefix $(OBJECT_DIRECTORY)/, $(C_FILES:.c=.o) $(C_MAIN_FILE:.c=.o))
 OBJECTS = $(C_OBJECTS)
